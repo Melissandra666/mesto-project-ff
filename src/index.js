@@ -12,7 +12,7 @@ const addCardPopup = document.querySelector('.popup_type_new-card');
 const popupCloseCard = addCardPopup.querySelector('.popup__close');
 const imagePopup = document.querySelector('.popup_type_image');
 const popupCloseImage = imagePopup.querySelector('.popup__close');
-const formElement = profilePopup.querySelector('.popup__form');
+const profileForm = profilePopup.querySelector('.popup__form');
 const nameInput = profilePopup.querySelector('.popup__input_type_name');
 const jobInput = profilePopup.querySelector('.popup__input_type_description');
 const profileTitle = document.querySelector('.profile__title');
@@ -46,7 +46,7 @@ function handleProfileEdit() {
   openModal(profilePopup);
 };
 
-function handleFormSubmit(evt) {
+function handleProfileFormSubmit(evt) {
   evt.preventDefault();
   profileTitle.textContent = nameInput.value;
   profileDescription.textContent = jobInput.value;
@@ -72,7 +72,7 @@ popupCloseProfile.addEventListener('click', () =>
   closeModal(profilePopup)
 );
 
-formElement.addEventListener('submit', handleFormSubmit);
+profileForm.addEventListener('submit', handleProfileFormSubmit);
 
 profileAddButton.addEventListener('click', () => 
   openModal(addCardPopup)
