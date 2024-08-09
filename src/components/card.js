@@ -1,4 +1,4 @@
-import { deleteCard, likeCard, unlikeCard } from './api.js';
+import { likeCard, unlikeCard } from './api.js';
 
 function handleLikeClick(evt) {
   const likeButton = evt.target;
@@ -20,15 +20,15 @@ function handleLikeClick(evt) {
     likeCard(cardId)
       .then((updatedCard) => {
         likeButton.classList.add('card__like-button_is-active');
-        likeCounter.textContent = updatedCard.likes.length;
+        likeCounter.textContent = updatedCard.likes.length; 
         likeCounter.classList.add('card__like-counter_is-active');
       })
-      .catch((err) => console.log(err));
+      .catch((err) => console.log(err)); 
   }
-};
+}
 
 function createCardElement(template, data, handleImageClick, handleLikeClick, handleDeleteClick, userId) {
-  const cardElement = template.querySelector('.card').cloneNode(true);
+  const cardElement = template.querySelector('.card').cloneNode(true); 
   cardElement.dataset.cardId = data._id;
   const cardImage = cardElement.querySelector('.card__image');
   const cardTitle = cardElement.querySelector('.card__title');
@@ -38,7 +38,7 @@ function createCardElement(template, data, handleImageClick, handleLikeClick, ha
   cardImage.src = data.link;
   cardImage.alt = data.name;
   cardTitle.textContent = data.name;
-  likeCounter.textContent = data.likes.length > 0 ? data.likes.length : '';
+  likeCounter.textContent = data.likes.length;
   if (data.likes.length > 0) {
     likeCounter.classList.add('card__like-counter_is-active');
   }
@@ -53,14 +53,14 @@ function createCardElement(template, data, handleImageClick, handleLikeClick, ha
       (evt) => handleDeleteClick(evt, data._id, cardElement)
     );
   } else {
-    deleteButton.style.display = 'none';
+    deleteButton.style.display = 'none'; 
   }
-  return cardElement;
+  return cardElement; 
 };
 
 function createCard(data, handleImageClick, handleLikeClick, handleDeleteClick, userId) {
-  const template = document.getElementById('card-template').content;
+  const template = document.getElementById('card-template').content; 
   return createCardElement(template, data, handleImageClick, handleLikeClick, handleDeleteClick, userId);
-}
+};
 
 export { createCard, handleLikeClick };
