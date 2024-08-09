@@ -2,7 +2,7 @@ const config = {
   baseUrl: 'https://nomoreparties.co/v1/wff-cohort-19',
   headers: {
     authorization: '337329cb-3c7c-4e06-8dd9-b4dee464329d',
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/json'
   },
 };
 
@@ -27,19 +27,19 @@ const getUserInfo = () => {
 
 const updateUserInfo = (name, about) => {
   return fetch(`${config.baseUrl}/users/me`, {
-    method: 'PATCH', 
+    method: 'PATCH',
     headers: config.headers,
     body: JSON.stringify({
-      name: name,
-      about: about,
+    name: name, 
+    about: about,
     }),
   }).then(checkResponse);
 };
 
 const addNewCard = (name, link) => {
   return fetch(`${config.baseUrl}/cards`, {
-    method: 'POST', 
-    headers: config.headers,
+    method: 'POST',
+    headers: config.headers, 
     body: JSON.stringify({
       name: name,
       link: link,
