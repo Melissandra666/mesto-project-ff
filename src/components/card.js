@@ -1,10 +1,16 @@
 import { likeCard, unlikeCard } from './api.js';
 
-function handleLikeClick(evt) {
-  const likeButton = evt.target;
-  const cardElement = likeButton.closest('.card');
-  const likeCounter = cardElement.querySelector('.card__like-counter');
-  const cardId = cardElement.dataset.cardId;
+document.querySelectorAll('.card__like-button').forEach((button) => {
+  button.addEventListener('click', (evt) => {
+    const likeButton = evt.target;
+    const cardElement = likeButton.closest('.card');
+    const likeCounter = cardElement.querySelector('.card__like-counter');
+    const cardId = cardElement.dataset.cardId;
+    handleLikeClick(cardId, likeButton, likeCounter);
+  });
+});
+
+function handleLikeClick(cardId, likeButton, likeCounter) {
   if (likeButton.classList.contains('card__like-button_is-active')) {
     unlikeCard(cardId)
       .then((updatedCard) => {
@@ -20,12 +26,13 @@ function handleLikeClick(evt) {
     likeCard(cardId)
       .then((updatedCard) => {
         likeButton.classList.add('card__like-button_is-active');
-        likeCounter.textContent = updatedCard.likes.length; 
+        likeCounter.textContent = updatedCard.likes.length;
         likeCounter.classList.add('card__like-counter_is-active');
       })
-      .catch((err) => console.log(err)); 
+      .catch((err) => console.log(err));
   }
 }
+
 
 function createCardElement(template, data, handleImageClick, handleLikeClick, handleDeleteClick, userId) {
   const cardElement = template.querySelector('.card').cloneNode(true); 
