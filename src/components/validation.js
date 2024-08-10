@@ -13,12 +13,12 @@ function checkInputValidity(inputElement, config) {
       errorMessage = "Введите корректное значение.";
     }
   }
-  if (!inputElement.validity.valid) {
-    showError(inputElement, errorMessage, config);
-    } else {
-      hideError(inputElement, config)
-    };
-   inputElement.addEventListener('input', checkInputValidity);
+  if (!inputElement.validity.valid || inputElement.validity.badInput) { 
+    showError(inputElement, errorMessage, config); 
+  } else { 
+    hideError(inputElement, config) 
+  };   
+  return errorMessage;
 };
 
 function hideError(inputElement, config) {
@@ -30,6 +30,7 @@ function hideError(inputElement, config) {
     errorElement.classList.remove(config.errorClass);
     inputElement.classList.remove(config.inputErrorClass);
   }
+  inputElement.setCustomValidity("");
 };
 
 function showError(inputElement, errorMessage, config) {
@@ -71,14 +72,19 @@ function enableValidation(config) {
     formElement.addEventListener("submit", (event) => event.preventDefault());
     toggleButtonState(inputList, buttonElement, config);
   });
+  inputElement.addEventListener('input', checkInputValidity);
 };
 
+function disabledButton(buttonElement, config) {
+  buttonElement.classList.add(config.inactiveButtonClass);
+  buttonElement.disabled = true;
+}
+  
 function clearValidation(formElement, config) {
   const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
   const buttonElement = formElement.querySelector(config.submitButtonSelector);
   inputList.forEach((inputElement) => hideError(inputElement, config));
-  buttonElement.classList.add(config.inactiveButtonClass);
-  uttonElement.disabled = true;
+  disabledButton(buttonElement, config);
 }
 
 export { enableValidation, clearValidation };
