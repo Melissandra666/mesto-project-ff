@@ -1,5 +1,5 @@
 import './pages/index.css';
-import { createCard, handleLikeClick } from './components/card.js';
+import { createCard, handleLikeClick, handleDeleteClick } from './components/card.js';
 import { initialCards } from './components/cards.js'; 
 import { openModal, closeModal } from './components/modal.js';
 import { enableValidation, clearValidation } from './components/validation.js';
@@ -92,24 +92,6 @@ function handleImageClick(data) {
   popupCaption.textContent = data.name; 
   openModal(imagePopup); 
 }; 
-
-function handleDeleteClick(evt, cardId, cardElement) {
-  openModal(confirmPopup);
-
-  confirmButton.onclick = () => {
-    renderLoading({ buttonElement: confirmButton, loadingText: 'Удаление...' });
-
-    deleteCard(cardId)
-      .then(() => {
-        cardElement.remove();
-        closeModal(confirmPopup);
-      })
-      .catch((err) => console.log(err))
-      .finally(() => {
-        renderLoading({ buttonElement: confirmButton, loadingText: 'Да' });
-      });
-  };
-} 
 
 function handleAddCardFormSubmit(evt) { 
   evt.preventDefault(); 
