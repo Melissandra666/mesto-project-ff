@@ -1,25 +1,33 @@
-function checkInputValidity(inputElement, config) {
-  let errorMessage = ""; 
-  if (inputElement.validity.valueMissing) {
-    errorMessage = "Вы пропустили это поле.";
-  } else if (inputElement.validity.tooShort) {
-    errorMessage = `Должно быть от ${inputElement.minLength} до ${inputElement.maxLength} символов.`;
-  } else if (inputElement.validity.patternMismatch) {
-    errorMessage = inputElement.dataset.errorMessage || "Неверный формат.";
-  } else if (inputElement.validity.typeMismatch) {
-    if (inputElement.type === "url") {
-      errorMessage = "Введите адрес сайта.";
-    } else {
-      errorMessage = "Введите корректное значение.";
-    }
-  }
-  if (!inputElement.validity.valid || inputElement.validity.badInput) { 
+function checkInputValidity(inputElement, config) { 
+  let errorMessage = "";  
+  if (inputElement.validity.valueMissing) { 
+    errorMessage = "Вы пропустили это поле."; 
+  } else if (inputElement.validity.tooShort) { 
+    errorMessage = `Должно быть от ${inputElement.minLength} до ${inputElement.maxLength} символов.`; 
+  } else if (inputElement.validity.patternMismatch) { 
+    errorMessage = inputElement.dataset.errorMessage || "Неверный формат."; 
+  } else if (inputElement.validity.typeMismatch) { 
+    if (inputElement.type === "url") { 
+      errorMessage = "Введите адрес сайта."; 
+    } else { 
+      errorMessage = "Введите корректное значение."; 
+    } 
+  } 
+  if (!inputElement.validity.valid) { 
     showError(inputElement, errorMessage, config); 
   } else { 
-    hideError(inputElement, config) 
-  };   
-  return errorMessage;
-};
+    hideError(inputElement, config); 
+  }
+}
+
+function addInputListeners(formElement, config) {
+  const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
+  inputList.forEach((inputElement) => {
+    inputElement.addEventListener('input', () => {
+      checkInputValidity(inputElement, config);
+    });
+  });
+}
 
 function hideError(inputElement, config) {
   const errorElement = inputElement
@@ -30,7 +38,7 @@ function hideError(inputElement, config) {
     errorElement.classList.remove(config.errorClass);
     inputElement.classList.remove(config.inputErrorClass);
   }
-  inputElement.setCustomValidity("");
+  inputElement.setCustomValidity("")
 };
 
 function showError(inputElement, errorMessage, config) {
@@ -43,20 +51,6 @@ function showError(inputElement, errorMessage, config) {
     inputElement.classList.add(config.inputErrorClass); 
   }
 };
-
-function hasInvalidInput(inputList) {
-  return inputList.some((inputElement) => !inputElement.validity.valid);
-};
-
-function toggleButtonState(inputList, buttonElement, config) {
-  if (hasInvalidInput(inputList)) {
-    buttonElement.classList.add(config.inactiveButtonClass); 
-    buttonElement.disabled = true; 
-  } else {
-    buttonElement.classList.remove(config.inactiveButtonClass); 
-    buttonElement.disabled = false;
-  }
-}
 
 function enableValidation(config) {
   const formList = Array.from(document.querySelectorAll(config.formSelector));
@@ -75,16 +69,26 @@ function enableValidation(config) {
   inputElement.addEventListener('input', checkInputValidity);
 };
 
-function disabledButton(buttonElement, config) {
+function disableButton(buttonElement, config) {
   buttonElement.classList.add(config.inactiveButtonClass);
   buttonElement.disabled = true;
-}
-  
-function clearValidation(formElement, config) {
-  const inputList = Array.from(formElement.querySelectorAll(config.inputSelector));
-  const buttonElement = formElement.querySelector(config.submitButtonSelector);
-  inputList.forEach((inputElement) => hideError(inputElement, config));
-  disabledButton(buttonElement, config);
-}
+};
+
+function clearValidation(formElement, config) { 
+  const inputList = Array.from(formElement.querySelectorAll(config.inputSelector)); 
+  const buttonElement = formElement.querySelector(config.submitButtonSelector); 
+  inputList.forEach((inputElement) => hideError(inputElement, config)); 
+  disableButton(buttonElement, config);
+};
+
+function toggleButtonState(inputList, buttonElement, config) {
+  const hasInvalidInput = inputList.some(inputElement => !inputElement.validity.valid);
+  if (hasInvalidInput) {
+    disableButton(buttonElement, config);
+  } else {
+    buttonElement.classList.remove(config.inactiveButtonClass);
+    buttonElement.disabled = false;
+  }
+};
 
 export { enableValidation, clearValidation };
