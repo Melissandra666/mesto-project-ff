@@ -1,38 +1,39 @@
-import { likeCard, unlikeCard } from './api.js';
+import { deleteCard, likeCard, unlikeCard } from './api.js';
 
-document.querySelectorAll('.card__like-button').forEach((button) => {
-  button.addEventListener('click', (evt) => {
-    const likeButton = evt.target;
-    const cardElement = likeButton.closest('.card');
-    const likeCounter = cardElement.querySelector('.card__like-counter');
-    const cardId = cardElement.dataset.cardId;
-    handleLikeClick(cardId, likeButton, likeCounter);
-  });
-});
-
-function handleLikeClick(cardId, likeButton, likeCounter) {
-  if (likeButton.classList.contains('card__like-button_is-active')) {
-    unlikeCard(cardId)
-      .then((updatedCard) => {
-        likeButton.classList.remove('card__like-button_is-active');
-        likeCounter.textContent =
-          updatedCard.likes.length > 0 ? updatedCard.likes.length : '';
-        if (updatedCard.likes.length === 0) {
-          likeCounter.classList.remove('card__like-counter_is-active');
-        }
-      })
-      .catch((err) => console.log(err));
-  } else {
-    likeCard(cardId)
-      .then((updatedCard) => {
-        likeButton.classList.add('card__like-button_is-active');
-        likeCounter.textContent = updatedCard.likes.length;
-        likeCounter.classList.add('card__like-counter_is-active');
-      })
-      .catch((err) => console.log(err));
-  }
+function handleLikeClick(cardId, likeButton, likeCounter) { 
+  if (likeButton.classList.contains('card__like-button_is-active')) { 
+    unlikeCard(cardId) 
+      .then((updatedCard) => { 
+        likeButton.classList.remove('card__like-button_is-active'); 
+        likeCounter.textContent = 
+          updatedCard.likes.length > 0 ? updatedCard.likes.length : ''; 
+        if (updatedCard.likes.length === 0) { 
+          likeCounter.classList.remove('card__like-counter_is-active'); 
+        } 
+      }) 
+      .catch((err) => console.log(err)); 
+  } else { 
+    likeCard(cardId) 
+      .then((updatedCard) => { 
+        likeButton.classList.add('card__like-button_is-active'); 
+        likeCounter.textContent = updatedCard.likes.length;  
+        likeCounter.classList.add('card__like-counter_is-active'); 
+      }) 
+      .catch((err) => console.log(err));  
+  } 
 }
 
+function handleDeleteClick(evt, cardId, cardElement) {
+  deleteCard(cardId)
+    .then(() => {
+      cardElement.remove();
+      closeModal(confirmPopup);
+    })
+    .catch((err) => console.log(err))
+    .finally(() => {
+      renderLoading({ buttonElement: confirmButton, loadingText: "Да" });
+    });
+};
 
 function createCardElement(template, data, handleImageClick, handleLikeClick, handleDeleteClick, userId) {
   const cardElement = template.querySelector('.card').cloneNode(true); 
@@ -53,21 +54,18 @@ function createCardElement(template, data, handleImageClick, handleLikeClick, ha
     likeButton.classList.add('card__like-button_is-active');
   }
   cardImage.addEventListener('click', () => handleImageClick(data));
-  likeButton.addEventListener('click', handleLikeClick);
+  likeButton.addEventListener('click', () => handleLikeClick(data._id, likeButton, likeCounter));
   if (data.owner._id === userId) {
-    deleteButton.addEventListener(
-      'click',
-      (evt) => handleDeleteClick(evt, data._id, cardElement)
-    );
+    deleteButton.addEventListener('click', (evt) => handleDeleteClick(evt, data._id, cardElement));
   } else {
     deleteButton.style.display = 'none'; 
   }
   return cardElement; 
-};
+}
 
 function createCard(data, handleImageClick, handleLikeClick, handleDeleteClick, userId) {
   const template = document.getElementById('card-template').content; 
   return createCardElement(template, data, handleImageClick, handleLikeClick, handleDeleteClick, userId);
 };
 
-export { createCard, handleLikeClick };
+export { createCard, handleLikeClick, handleDeleteClick };
