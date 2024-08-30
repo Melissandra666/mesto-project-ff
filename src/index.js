@@ -29,11 +29,7 @@ const avatarCloseButton = avatarPopup.querySelector('.popup__close');
 const editAvatarButton = document.querySelector('.profile__image');
 const popupCaption = imagePopup.querySelector('.popup__caption');
 const popupImage = imagePopup.querySelector('.popup__image');
-
-const renderLoading = ({ buttonElement, loadingText }) => {
-  buttonElement.textContent = loadingText; 
-};
-
+const renderLoading = ({ buttonElement, loadingText }) => {buttonElement.textContent = loadingText; };
 const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
