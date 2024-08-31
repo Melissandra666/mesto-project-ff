@@ -27,12 +27,8 @@ function handleDeleteClick(evt, cardId, cardElement) {
   deleteCard(cardId)
     .then(() => {
       cardElement.remove();
-      closeModal(confirmPopup);
     })
     .catch((err) => console.log(err))
-    .finally(() => {
-      renderLoading({ buttonElement: confirmButton, loadingText: "Да" });
-    });
 };
 
 function createCardElement(template, data, handleImageClick, handleLikeClick, handleDeleteClick, userId) {
