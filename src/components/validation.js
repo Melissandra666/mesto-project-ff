@@ -66,7 +66,6 @@ function enableValidation(config) {
     formElement.addEventListener("submit", (event) => event.preventDefault());
     toggleButtonState(inputList, buttonElement, config);
   });
-  inputElement.addEventListener('input', checkInputValidity);
 };
 
 function disableButton(buttonElement, config) {
