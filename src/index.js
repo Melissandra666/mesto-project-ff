@@ -29,7 +29,6 @@ const avatarCloseButton = avatarPopup.querySelector('.popup__close');
 const editAvatarButton = document.querySelector('.profile__image');
 const popupCaption = imagePopup.querySelector('.popup__caption');
 const popupImage = imagePopup.querySelector('.popup__image');
-const renderLoading = ({ buttonElement, loadingText }) => {buttonElement.textContent = loadingText; };
 const validationConfig = {
   formSelector: '.popup__form',
   inputSelector: '.popup__input',
@@ -65,7 +64,6 @@ function handleProfileEdit() {
 function handleProfileFormSubmit(evt) { 
   evt.preventDefault(); 
   const submitButton = profileForm.querySelector(validationConfig.submitButtonSelector);
-  renderLoading({ buttonElement: submitButton, loadingText: 'Сохранение...' });
   const newName = nameInput.value;
   const newAbout = jobInput.value;
   updateUserInfo(newName, newAbout)
@@ -75,9 +73,6 @@ function handleProfileFormSubmit(evt) {
       closeModal(profilePopup);
     })
     .catch((err) => console.log(err))
-    .finally(() => {
-      renderLoading({ buttonElement: submitButton, loadingText: 'Сохранить' });
-  });
 }; 
  
 function handleImageClick(data) { 
@@ -92,7 +87,6 @@ function handleImageClick(data) {
 function handleAddCardFormSubmit(evt) { 
   evt.preventDefault(); 
   const submitButton = addCardForm.querySelector(validationConfig.submitButtonSelector);
-  renderLoading({ buttonElement: submitButton, loadingText: 'Создание...' });
   const cardData = { 
     name: cardNameInput.value, 
     link: urlInput.value, 
@@ -106,9 +100,6 @@ function handleAddCardFormSubmit(evt) {
     clearValidation(addCardForm, validationConfig); 
   })
   .catch((err) => console.log(err))
-  .finally(() => {
-    renderLoading({ buttonElement: submitButton, loadingText: 'Создать' });
-  });
 }; 
 
 function handleEditAvatarClick() {
@@ -120,7 +111,6 @@ function handleEditAvatarClick() {
 function handleAvatarFormSubmit(evt) {
   evt.preventDefault();
   const submitButton = avatarForm.querySelector(validationConfig.submitButtonSelector);
-  renderLoading({ buttonElement: submitButton, loadingText: 'Сохранение...' });
   const newAvatar = avatarInput.value;
   updateAvatar(newAvatar) 
     .then((userInfo) => {
@@ -128,9 +118,6 @@ function handleAvatarFormSubmit(evt) {
       closeModal(avatarPopup);
     })
     .catch((err) => console.log(err)) 
-    .finally(() => {
-      renderLoading({ buttonElement: submitButton, loadingText: 'Сохранить' }); 
-    });
 }
  
 Promise.all([getUserInfo(), getInitialCards()])
